@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3.4
+          bundler-cache: true
+
+      - name: Install system dependencies
+        run: sudo apt-get install -y cmake
+
+      - name: Install Ruby dependencies
+        run: bundle install
+
+      - name: Build and install CastXML
+        run: |
+          git clone https://github.com/CastXML/CastXML.git
+          mkdir CastXMLBuild
+          cd CastXMLBuild
+          cmake ../CastXML
+          make
+          echo "$PWD/bin" >> $GITHUB_PATH
+
+      - name: Run tests
+        run: bundle exec rspec
+
+      - name: Lint code for consistent style
+        run: bundle exec rubocop --parallel
+
+      - name: Cache CastXML build
+        uses: actions/cache@v3
+        with:
+          path: CastXMLBuild
+          key: ${{ runner.os }}-castxml-${{ hashFiles('**/CastXML/**') }}
+          restore-keys: |
+            ${{ runner.os }}-castxml-

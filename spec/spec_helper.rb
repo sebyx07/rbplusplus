@@ -5,6 +5,7 @@ $:.unshift File.expand_path(File.dirname(__FILE__) + '/generated')
 
 require 'pry'
 require 'rbplusplus'
+require 'fileutils'
 
 module FileDirectoryHelpers
   def full_dir(path)
@@ -13,16 +14,11 @@ module FileDirectoryHelpers
 end
 
 module TestHelpers
-  def clear_info
-    `rm -rf #{full_dir('generated')}/*`
-  end
-
   def silence_logging
     RbPlusPlus::Logger.silent!
   end
 
   def test_setup
-    clear_info
     silence_logging
   end
 end
@@ -40,4 +36,8 @@ RSpec.configure do |config|
   end
 
   config.order = 'random'
+
+  config.before do
+    FileUtils.rm_rf('spec/generated')
+  end
 end
