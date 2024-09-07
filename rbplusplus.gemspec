@@ -6,7 +6,11 @@ Gem::Specification.new do |s|
   s.version = RbPlusPlus::VERSION
   s.license = 'MIT'
   s.summary = 'Ruby library to generate Rice wrapper code'
+
   s.homepage = 'https://github.com/jasonroelofs/rbplusplus'
+  s.metadata['homepage_uri'] = s.homepage
+  s.metadata['source_code_uri'] = s.homepage
+
   s.author = 'Jason Roelofs'
   s.email = 'jasongroelofs@gmail.com'
   s.required_ruby_version = '>= 3.0.0'
