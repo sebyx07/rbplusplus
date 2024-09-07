@@ -25,9 +25,6 @@ module RbGCCXML
 
       base_type = NodeCache.find(attributes["type"])
       base_type == new_val
-
-    rescue Exception => e
-      binding.pry
     end
   end
 end
