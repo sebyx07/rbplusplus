@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module RbPlusPlus
   module Builders
-
     # Extension node.
     # There is only ever one of these in a project as this is
     # the top level node for building a Ruby extension.
@@ -9,7 +10,6 @@ module RbPlusPlus
     # symantics, in that they expose to Kernel and have slightly
     # different function handling and code generation.
     class ExtensionNode < ModuleNode
-
       attr_reader :additional_includes
 
       def initialize(name, code, modules)
@@ -42,21 +42,18 @@ module RbPlusPlus
         # Let nodes build their code, splitting up code blocks into
         # includes, declarations, and registrations,
         # then wrap it up in our own template
-        registrations << "extern \"C\""
+        registrations << 'extern "C"'
         registrations << "void Init_#{@name}() {"
-        registrations << "RUBY_TRY {"
+        registrations << 'RUBY_TRY {'
       end
 
       private
-
-      def with_module_functions
-        @code.functions.each do |func|
-          next if do_not_wrap?(func)
-          add_child GlobalFunctionNode.new(func, self)
+        def with_module_functions
+          @code.functions.each do |func|
+            next if do_not_wrap?(func)
+            add_child GlobalFunctionNode.new(func, self)
+          end
         end
-      end
-
     end
-
   end
 end

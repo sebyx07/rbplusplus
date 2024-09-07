@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 module RbPlusPlus
   # Helper method for getting access to the logger system
   # Special logger that simply prints out to stdout and stderr
   # Can be configured to ignore certain warning messages.
   class Logger
     class << self
-
       # Tell the logger to print out every message it gets
       def verbose=(val)
         @@verbose = val

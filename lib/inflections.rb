@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Inflector.inflections do |inflect|
   inflect.plural(/$/, 's')
   inflect.plural(/s$/i, 's')

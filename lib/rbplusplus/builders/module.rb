@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module RbPlusPlus
   module Builders
-
     # Handles code generation dealing with user-defined modules.
     class ModuleNode < Base
       include ModuleHelpers
@@ -29,10 +30,10 @@ module RbPlusPlus
       def build
         with_modules
 
-        add_child IncludeNode.new(self, "rice/Module.hpp", :system)
+        add_child IncludeNode.new(self, 'rice/Module.hpp', :system)
 
         # Make sure we ignore anything from the :: namespace
-        if self.code && self.code.name != "::"
+        if self.code && self.code.name != '::'
           with_module_functions
           with_enumerations
           with_classes
@@ -40,8 +41,8 @@ module RbPlusPlus
 
         nodes.flatten!
 
-        self.rice_variable_type = "Rice::Module"
-        self.rice_variable = "rb_m#{self.qualified_name.as_variable}"
+        self.rice_variable_type = 'Rice::Module'
+        self.rice_variable = "rb_m#{RbPlusPlus::Utils.string_as_variable(qualified_name)}"
       end
 
       def write
@@ -54,6 +55,5 @@ module RbPlusPlus
         end
       end
     end
-
   end
 end

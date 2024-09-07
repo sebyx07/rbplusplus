@@ -1,45 +1,43 @@
-require 'test_helper'
-
-describe "Wrapping enumerations" do
-
+# frozen_string_literal: true
+describe 'Wrapping enumerations' do
   before(:all) do
-    Extension.new "enums" do |e|
-      e.sources full_dir("headers/enums.h")
-      e.namespace "enums"
+    RbPlusPlus::Extension.new 'enums' do |e|
+      e.sources full_dir('headers/enums.h')
+      e.namespace 'enums'
       e.writer_mode :single
 
-      e.module "Mod" do |m|
-        m.namespace "inner"
+      e.module 'Mod' do |m|
+        m.namespace 'inner'
       end
     end
 
     require 'enums'
   end
 
-  specify "should wrap up enums properly" do
+  specify 'should wrap up enums properly' do
     TestEnum::VALUE1.to_i.should == 0
     TestEnum::VALUE2.to_i.should == 1
     TestEnum::VALUE3.to_i.should == 2
   end
-  
-  specify "should only wrap public enums" do
+
+  specify 'should only wrap public enums' do
     lambda { Tester::NotWrapped }.should raise_error(NameError)
     lambda { Tester::AlsoNotWrapped }.should raise_error(NameError)
   end
 
-  specify "should wrap up enumerations at proper nesting" do
+  specify 'should wrap up enumerations at proper nesting' do
     Tester::MyEnum::I_LIKE_MONEY.to_i.should == 3
     Tester::MyEnum::YOU_LIKE_MONEY_TOO.to_i.should == 4
     Tester::MyEnum::I_LIKE_YOU.to_i.should == 7
   end
 
-  specify "should work in user-defined modules" do
+  specify 'should work in user-defined modules' do
     Mod::InnerEnum::INNER_1.to_i.should == 0
     Mod::InnerEnum::INNER_2.to_i.should == 1
   end
 
-  specify "should allow use of enumerations as types" do
-    what_test_enum(TestEnum::VALUE1).should == "We gots enum 0";
+  specify 'should allow use of enumerations as types' do
+    what_test_enum(TestEnum::VALUE1).should == 'We gots enum 0'
 
     # Types should be adhered to
     lambda do
@@ -47,13 +45,13 @@ describe "Wrapping enumerations" do
     end.should raise_error(RuntimeError)
 
     t = Tester.new
-    t.get_enum_description(Tester::MyEnum::YOU_LIKE_MONEY_TOO).should == "You like money!"
+    t.get_enum_description(Tester::MyEnum::YOU_LIKE_MONEY_TOO).should == 'You like money!'
   end
 
-  specify "should properly build to_ruby converters for const enum return types" do
+  specify 'should properly build to_ruby converters for const enum return types' do
     t = Tester.new
-    t.get_an_enum("I like money").should == Tester::MyEnum::I_LIKE_MONEY
-    t.get_an_enum("You like money").should == Tester::MyEnum::YOU_LIKE_MONEY_TOO
+    t.get_an_enum('I like money').should == Tester::MyEnum::I_LIKE_MONEY
+    t.get_an_enum('You like money').should == Tester::MyEnum::YOU_LIKE_MONEY_TOO
   end
 
   specify "anonymous enumerations' values are added as constants to the parent class" do
@@ -70,7 +68,7 @@ describe "Wrapping enumerations" do
     SEPERATE_OUTER_VALUE.should == 14
   end
 
-  specify "works with single element enumerations" do
+  specify 'works with single element enumerations' do
     Tester::SINGLE_VALUE.to_i.should == 12
   end
 end

@@ -1,17 +1,15 @@
-require 'test_helper'
-
-describe "properly handles and wraps function pointer arguments" do
-
+# frozen_string_literal: true
+describe 'properly handles and wraps function pointer arguments' do
   before(:all) do
-    Extension.new "function_pointers" do |e|
-      e.sources full_dir("headers/function_pointers.h")
-      node = e.namespace "function_pointers"
+    RbPlusPlus::Extension.new 'function_pointers' do |e|
+      e.sources full_dir('headers/function_pointers.h')
+      e.namespace 'function_pointers'
     end
 
     require 'function_pointers'
   end
 
-  specify "no arguments, no return" do
+  specify 'no arguments, no return' do
     proc_called = false
 
     set_callback do
@@ -23,7 +21,7 @@ describe "properly handles and wraps function pointer arguments" do
     proc_called.should eq(true)
   end
 
-  specify "arguments, no return" do
+  specify 'arguments, no return' do
     proc_arg = nil
 
     set_callback_with_args do |i|
@@ -35,7 +33,7 @@ describe "properly handles and wraps function pointer arguments" do
     proc_arg.should == 10
   end
 
-  specify "arguments and return" do
+  specify 'arguments and return' do
     proc_arg = nil
     set_callback_returns do |i|
       proc_arg = i
@@ -47,6 +45,4 @@ describe "properly handles and wraps function pointer arguments" do
     proc_arg.should == 8
     ret.should == 80
   end
-
 end
-

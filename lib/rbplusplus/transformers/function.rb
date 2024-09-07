@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RbGCCXML
   class Function < Node
     # Always true for functions, false for methods

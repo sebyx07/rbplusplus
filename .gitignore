@@ -2,7 +2,9 @@
 html
 doc
 pkg
-test/generated
+spec/generated
 publish
 .bundle
 Gemfile.lock
+.idea/
+tmp/

@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 module RbPlusPlus
   module Builders
     module ClassHelpers
-
       # Build up any classes or structs under this module
       def with_classes
         [
@@ -21,7 +22,7 @@ module RbPlusPlus
 
         to_use = self.code._get_constructor
 
-        real_constructors = [self.code.constructors].flatten.select {|c| !c.attributes[:artificial]}
+        real_constructors = [self.code.constructors].flatten.select { |c| !c.attributes[:artificial] }
 
         if real_constructors.empty?
           real_constructors = self.code.constructors
@@ -31,8 +32,8 @@ module RbPlusPlus
 
         if to_use.nil? && real_constructors.length > 1
           Logger.warn :multiple_constructors, "#{self.code.qualified_name} has multiple constructors. " +
-            "While the extension will probably compile, Rice only supports one constructor, " +
-            "please use #use_contructor to select which one to use."
+            'While the extension will probably compile, Rice only supports one constructor, ' +
+            'please use #use_contructor to select which one to use.'
         end
 
         [to_use || real_constructors].flatten.each do |constructor|
@@ -40,10 +41,10 @@ module RbPlusPlus
 
           Logger.debug "Wrapping constructor: #{constructor.attributes["demangled"]}"
 
-          if constructor.attributes["artificial"]
+          if constructor.attributes['artificial']
             if ignore_artificial && constructor.arguments.length == 1
               Logger.debug "Not wrapping artificial constructor #{constructor.attributes["demangled"]}"
-              next 
+              next
             end
           end
 
@@ -86,7 +87,6 @@ module RbPlusPlus
           add_child InstanceVariableNode.new(var, self)
         end
       end
-
     end
   end
 end

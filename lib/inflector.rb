@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'singleton'
 
 # The Inflector transforms words from singular to plural, class names to table names, modularized class names to ones without,
@@ -47,14 +49,14 @@ module Inflector
     #   irregular 'octopus', 'octopi'
     #   irregular 'person', 'people'
     def irregular(singular, plural)
-      if singular[0,1].upcase == plural[0,1].upcase
-        plural(Regexp.new("(#{singular[0,1]})#{singular[1..-1]}$", "i"), '\1' + plural[1..-1])
-        singular(Regexp.new("(#{plural[0,1]})#{plural[1..-1]}$", "i"), '\1' + singular[1..-1])
+      if singular[0, 1].upcase == plural[0, 1].upcase
+        plural(Regexp.new("(#{singular[0, 1]})#{singular[1..-1]}$", 'i'), '\1' + plural[1..-1])
+        singular(Regexp.new("(#{plural[0, 1]})#{plural[1..-1]}$", 'i'), '\1' + singular[1..-1])
       else
-        plural(Regexp.new("#{singular[0,1].upcase}(?i)#{singular[1..-1]}$"), plural[0,1].upcase + plural[1..-1])
-        plural(Regexp.new("#{singular[0,1].downcase}(?i)#{singular[1..-1]}$"), plural[0,1].downcase + plural[1..-1])
-        singular(Regexp.new("#{plural[0,1].upcase}(?i)#{plural[1..-1]}$"), singular[0,1].upcase + singular[1..-1])
-        singular(Regexp.new("#{plural[0,1].downcase}(?i)#{plural[1..-1]}$"), singular[0,1].downcase + singular[1..-1])       
+        plural(Regexp.new("#{singular[0, 1].upcase}(?i)#{singular[1..-1]}$"), plural[0, 1].upcase + plural[1..-1])
+        plural(Regexp.new("#{singular[0, 1].downcase}(?i)#{singular[1..-1]}$"), plural[0, 1].downcase + plural[1..-1])
+        singular(Regexp.new("#{plural[0, 1].upcase}(?i)#{plural[1..-1]}$"), singular[0, 1].upcase + singular[1..-1])
+        singular(Regexp.new("#{plural[0, 1].downcase}(?i)#{plural[1..-1]}$"), singular[0, 1].downcase + singular[1..-1])
       end
     end
 
@@ -76,10 +78,10 @@ module Inflector
     #   clear :plurals
     def clear(scope = :all)
       case scope
-        when :all
-          @plurals, @singulars, @uncountables = [], [], []
-        else
-          instance_variable_set "@#{scope}", []
+      when :all
+        @plurals, @singulars, @uncountables = [], [], []
+      else
+        instance_variable_set "@#{scope}", []
       end
     end
   end
@@ -174,9 +176,9 @@ module Inflector
   #   "ActiveRecord::Errors".underscore #=> active_record/errors
   def underscore(camel_cased_word)
     camel_cased_word.to_s.gsub(/::/, '/').
-      gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-      gsub(/([a-z\d])([A-Z])/,'\1_\2').
-      tr("-", "_").
+      gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2').
+      gsub(/([a-z\d])([A-Z])/, '\1_\2').
+      tr('-', '_').
       downcase
   end
 
@@ -185,7 +187,7 @@ module Inflector
   # Example
   #   "puni_puni" #=> "puni-puni"
   def dasherize(underscored_word)
-    underscored_word.gsub(/_/, '-')
+    underscored_word.tr('_', '-')
   end
 
   # Capitalizes the first word and turns underscores into spaces and strips _id.
@@ -195,7 +197,7 @@ module Inflector
   #   "employee_salary" #=> "Employee salary"
   #   "author_id" #=> "Author"
   def humanize(lower_case_and_underscored_word)
-    lower_case_and_underscored_word.to_s.gsub(/_id$/, "").gsub(/_/, " ").capitalize
+    lower_case_and_underscored_word.to_s.gsub(/_id$/, '').tr('_', ' ').capitalize
   end
 
   # Removes the module part from the expression in the string
@@ -242,7 +244,7 @@ module Inflector
   #   "Message".foreign_key(false) #=> "messageid"
   #   "Admin::Post".foreign_key #=> "post_id"
   def foreign_key(class_name, separate_class_name_and_id_with_underscore = true)
-    underscore(demodulize(class_name)) + (separate_class_name_and_id_with_underscore ? "_id" : "id")
+    underscore(demodulize(class_name)) + (separate_class_name_and_id_with_underscore ? '_id' : 'id')
   end
 
   # Constantize tries to find a declared constant with the name specified
@@ -273,10 +275,10 @@ module Inflector
       "#{number}th"
     else
       case number.to_i % 10
-        when 1; "#{number}st"
-        when 2; "#{number}nd"
-        when 3; "#{number}rd"
-        else    "#{number}th"
+      when 1; "#{number}st"
+      when 2; "#{number}nd"
+      when 3; "#{number}rd"
+      else    "#{number}th"
       end
     end
   end

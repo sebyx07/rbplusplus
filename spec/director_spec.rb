@@ -1,12 +1,10 @@
-require 'test_helper'
-
-describe "Director proxy generation" do
-
+# frozen_string_literal: true
+describe 'Director proxy generation' do
   before(:all) do
-    Extension.new "director" do |e|
-      e.sources full_dir("headers/director.h")
+    RbPlusPlus::Extension.new 'director' do |e|
+      e.sources full_dir('headers/director.h')
 
-      node = e.namespace "director"
+      node = e.namespace 'director'
 
       # As director is pretty complicated to get right
       # automatically for now, we force-specify which
@@ -15,18 +13,18 @@ describe "Director proxy generation" do
         node.classes(k).director
       end
 
-      node.classes("Worker").methods("doProcessImpl").default_return_value(0)
+      node.classes('Worker').methods('doProcessImpl').default_return_value(0)
 
-      klass = node.classes("BadNameClass")
-      klass.wrap_as("BetterNamedClass")
-      klass.methods("_is_x_ok_to_run").wrap_as("x_ok?")
-      klass.methods("__do_someProcessing").wrap_as("do_processing")
+      klass = node.classes('BadNameClass')
+      klass.wrap_as('BetterNamedClass')
+      klass.methods('_is_x_ok_to_run').wrap_as('x_ok?')
+      klass.methods('__do_someProcessing').wrap_as('do_processing')
     end
 
     require 'director'
   end
 
-  specify "polymorphic calls extend into Ruby" do
+  specify 'polymorphic calls extend into Ruby' do
     class MyWorker < Worker
       def process(num)
         num + 10
@@ -39,7 +37,7 @@ describe "Director proxy generation" do
     h.process_workers(5).should == 15
   end
 
-  specify "super calls on pure virtual raise exception" do
+  specify 'super calls on pure virtual raise exception' do
     class SuperBadWorker < Worker
       def process(num)
         super + 10
@@ -51,7 +49,7 @@ describe "Director proxy generation" do
     end.should raise_error(NotImplementedError)
   end
 
-  specify "allows super calls to continue back into C++ classes" do
+  specify 'allows super calls to continue back into C++ classes' do
     class SuperGoodWorker < Worker
       def do_something(num)
         super + 10
@@ -61,7 +59,7 @@ describe "Director proxy generation" do
     SuperGoodWorker.new.do_something(10).should == 50
   end
 
-  specify "can specify a default return value in the wrapper" do
+  specify 'can specify a default return value in the wrapper' do
     class MyAwesomeWorker < Worker
       def do_process_impl(num)
         num + 7
@@ -81,20 +79,20 @@ describe "Director proxy generation" do
     h.process_workers(10).should == 18
   end
 
-  specify "properly adds all constructor arguments" do
+  specify 'properly adds all constructor arguments' do
     v = VirtualWithArgs.new 14, true
-    v.process_a("hi").should == 16
+    v.process_a('hi').should == 16
     v.process_b.should eq(true)
   end
 
-  specify "takes into account renamed methods / classes" do
+  specify 'takes into account renamed methods / classes' do
     c = BetterNamedClass.new
     c.x_ok?.should_not eq(true)
 
     c.do_processing.should == 14
   end
 
-  specify "handles no constructors" do
+  specify 'handles no constructors' do
     class MyThing < NoConstructor
     end
 
@@ -102,7 +100,7 @@ describe "Director proxy generation" do
     n.do_something.should == 4
   end
 
-  specify "only builds method wrappers for virtual methods" do
+  specify 'only builds method wrappers for virtual methods' do
     class NumberWorker < Worker
       def get_number
         super + 15
@@ -120,12 +118,12 @@ describe "Director proxy generation" do
     h.add_worker_numbers.should == 12
   end
 
-  specify "Directors implement all pure virtual methods up the inheritance tree" do
-    vbase = VBase.new
+  specify 'Directors implement all pure virtual methods up the inheritance tree' do
+    VBase.new
     v1 = VOne.new
     v2 = VTwo.new
 
-    v1.method_one.should == "methodOne"
+    v1.method_one.should == 'methodOne'
 
     lambda do
       v1.method_two
@@ -135,15 +133,15 @@ describe "Director proxy generation" do
       v1.method_three
     end.should raise_error(NotImplementedError)
 
-    v2.method_one.should == "methodOne"
-    v2.method_two.should == "methodTwo"
+    v2.method_one.should == 'methodOne'
+    v2.method_two.should == 'methodTwo'
 
     lambda do
       v2.method_three
     end.should raise_error(NotImplementedError)
   end
 
-  specify "handles superclasses of the class with virtual methods" do
+  specify 'handles superclasses of the class with virtual methods' do
     class QuadWorker < MultiplyWorker
       def process(num)
         num * 4
@@ -159,13 +157,12 @@ describe "Director proxy generation" do
     h.process_workers(5).should == 40
   end
 
-  specify "multiple files writer properly handles directors and nested nodes" do
+  specify 'multiple files writer properly handles directors and nested nodes' do
     Worker::ZeeEnum::VALUE.to_i.should == 4
   end
 
-  specify "inheritance types are registered properly" do
+  specify 'inheritance types are registered properly' do
     two = VTwo.new
-    VBase::process(two).should == "methodTwo"
+    VBase.process(two).should == 'methodTwo'
   end
-
 end

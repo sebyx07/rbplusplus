@@ -16,6 +16,7 @@ Note: For those familiar with py++, the similarities are minimal. Outside of the
 Rice builds and installs on any *nix system, including Mac OS X.
 Rice and rb++ have been shown to work under Cygwin and MinGW / MSYS.
 
+    apt-get install castxml
     gem install rbplusplus
 
 ## The Project
@@ -36,7 +37,7 @@ All rb++ projects start off with the Extension class:
 require 'rbplusplus'
 include RbPlusPlus
 
-Extension.new "extension_name"
+Extension.new 'extension_name'
 ```
 
 Rb++ has one requirement on the C++ code: it must be wrapped in a namespace. If the code you're trying to wrap is not in it's own namespace, please build a seperate header file that wraps everything in a namespace as such:
@@ -57,8 +58,10 @@ Extension has two ways of being used: block syntax for simple projects and immed
 For most extension wrapping needs, Block Mode takes care of automating everything that it can:
 
 ```ruby
-Extension.new "extension" do |e|
-  ...
+require 'rbplusplus'
+RbPlusPlus::Extension.new 'my_math' do |e|
+  e.sources File.expand_path(File.dirname(__FILE__) + '/code/MyMath.h')
+  e.namespace 'my_math'
 end
 ```
 
@@ -67,7 +70,7 @@ end
 For those that want more fine-grained control over the parsing / building / writing / compiling process, immediate syntax is also available
 
 ```ruby
-e = Extension.new "extension"
+e = RbPlusPlus::Extension.new 'extension'
 ...
 e.build    # => Generates the C++ code
 e.write    # => Writes out to files
@@ -82,23 +85,23 @@ For the most basic usage, there are only two required calls: `Extension.sources`
 
 ```ruby
 # A single header file
-Extension.new "extension" do |e|
-  e.sources "/path/to/header.h"
+RbPlusPlus::Extension.new 'extension' do |e|
+  e.sources '/path/to/header.h'
 end
 
 # An array of header files
-Extension.new "extension" do |e|
-  e.sources ["/path/to/header.h", "/path/there.h"]
+RbPlusPlus::Extension.new 'extension' do |e|
+  e.sources %w[/path/to/header.h /path/there.h]
 end
 
 # A glob
-Extension.new "extension" do |e|
-  e.sources "/path/to/*.h"
+RbPlusPlus::Extension.new 'extension' do |e|
+  e.sources '/path/to/*.h'
 end
 
 # An array of globs
-Extension.new "extension" do |e|
-  e.sources ["/path/to/*.h", "/elsewhere/*.hpp"]
+RbPlusPlus::Extension.new 'extension' do |e|
+  e.sources %w[/path/to/*.h /elsewhere/*.hpp]
 end
 ```
 
@@ -106,8 +109,8 @@ Once your sources are defined, you need to tell rb++ the name of the namespace f
 
 ```ruby
 # Wrap all code under the 'to_wrap' namespace
-Extension.new "extension" do |e|
-  e.namespace "to_wrap"
+RbPlusPlus::Extension.new 'extension' do |e|
+  e.namespace 'to_wrap'
 end
 ```
 
@@ -115,13 +118,13 @@ When wrapping code under ruby modules, you specify which namespace should be wra
 
 ```ruby
 # Wrap all code under the 'to_wrap' namespace
-Extension.new "extension" do |e|
-  e.module "ExtMod" do |m|
-    m.namespace "to_wrap"
+RbPlusPlus::Extension.new 'extension' do |e|
+  e.module 'ExtMod' do |m|
+    m.namespace 'to_wrap'
   end
 
-  e.module "Util" do |m|
-    m.namespace "to_wrap_util"
+  e.module 'Util' do |m|
+    m.namespace 'to_wrap_util'
   end
 end
 ```
@@ -131,8 +134,8 @@ The general rule is this: If you want C++ code wrapped, you must use `Extension#
 When working in Immediate Mode, there is one more required method after `#sources` and `#namespace`: `#working_dir=`, which you use to specify which directory to write out the Rice source code.  When using Block Mode, rb++ can figure out a good default working directory due to `__FILE__` on the block's binding. Without this block, rb++ is clueless and must be told where it's working directory should be:
 
 ```ruby
-e = Extension.new "extension"
-e.working_dir = "/path/to/generate/files/"
+e = RbPlusPlus::Extension.new 'extension'
+e.working_dir = '/path/to/generate/files/'
 ```
 
 ## More Detailed Usage
@@ -167,7 +170,7 @@ Often times you will want to ignore a method on an object, a whole class, or a w
 You can tell rb++ which namespaces/classes/methods to ignore with `#ignore`:
 
 ```ruby
-Extension.new "extension" do |e|
+RbPlusPlus::Extension.new "extension" do |e|
   e.sources ...
   node = e.namespace "Physics"
   node.classes("Callback").ignore                           # Ignore classes named Callback
@@ -179,7 +182,7 @@ You can also ignore a whole set of query results with the same notation:
 
 
 ```ruby
-Extension.new "extension" do |e|
+RbPlusPlus::Extension.new "extension" do |e|
   ...
   node.methods.find(:all, :name => "free").ignore           # Ignores all instance methods named 'free'
   ...
@@ -191,7 +194,7 @@ end
 For more control over exactly where a given piece of C++ code will be wrapped, use `Module#includes`:
 
 ```ruby
-Extension.new "extension" do |e|
+RbPlusPlus::Extension.new "extension" do |e|
   e.sources ...
   node = e.namespace "PhysicsMath"
 
@@ -216,7 +219,7 @@ Note that when you include something in a module it is moved from it's original 
 Sometimes C++ libraries implement certain architectures that are nice to have in C++, but are terrible in Ruby, or standards in Ruby aren't possible in C++ (func?, func=, func!). For this reason, every node can be renamed using the `#wrap_as` method:
 
 ```ruby
-Extension.new "extension" do |e|
+RbPlusPlus::Extension.new "extension" do |e|
   e.sources ...
   node = e.namespace "Physics"
   node.classes("CShape").wrap_as("Shape")
@@ -257,19 +260,19 @@ Math.new.mod(1, 2)
 A current limitation in rice currently does not allow for more than one constructor to be exported. This will not be a limitation in future versions of Rice, but for now make sure that only one constructor is wrapped. This can be done via direct constructor access:
 
 ```ruby
-node.classes("MyClass").constructors[0].ignore
+node.classes('MyClass').constructors[0].ignore
 ```
 
 or by querying according to the arguments of the constructor(s) you want to ignore:
 
 ```ruby
-node.classes("MyClass").constructors.find(:arguments => [nil,  nil]) # ignore constructors with 2 arguments
+node.classes('MyClass').constructors.find(arguments: [nil,  nil]) # ignore constructors with 2 arguments
 ```
 
 Contrary to ignoring a constructor, you can also expliclty tell rb++ which constructor to use:
 
 ```ruby
-my_class = node.classes("MyClass")
+my_class = node.classes('MyClass')
 my_class.use_constructor my_class.constructors[0]
 ```
 
@@ -292,22 +295,22 @@ Will be exposed by default like so:
 
 ```ruby
 s = System.new
-s.puts_0("Hello world")
+s.puts_0('Hello world')
 s.puts_1
 ```
 
 You can, however, rename them as you see fit if you tell rb++ how, for example:
 
 ```ruby
-puts_methods = node.classes("System").methods("puts")
-puts_methods[0].wrap_as("puts")
+puts_methods = node.classes('System').methods('puts')
+puts_methods[0].wrap_as('puts')
 ```
 
 After doing this you can use the methods as follows:
 
 ```ruby
 s = System.new
-s.puts("Hello World")
+s.puts('Hello World')
 s.puts_1
 ```
 
@@ -332,7 +335,7 @@ __ModuleName_ClassName.rb.cpp
 This is done to prevent obscenely long compile times, super large code files, or uncompilable extensions due to system limitations (e.g. RAM) that are common problems with big SWIG projects. Rb++ can also write out the extension code in a single file (extension_name.cpp) with `Extension#writer_mode`
 
 ```ruby
-Extension.new "extension" do |e|
+Extension.new 'extension' do |e|
   e.writer_mode :single # :multiple is the default
 end
 ```
@@ -342,7 +345,7 @@ end
 Rb++ takes care of setting up the extension to be properly compiled, but sometimes certain compiler options can't be deduced. Rb++ has options to specify library paths (-L), libraries (-l), and include paths (-I) to add to the compilation lines, as well as just adding your own flags directly to the command line. These are options on Extension.sources
 
 ```ruby
-Extension.new "extension" do |e|
+RbPlusPlus::Extension.new "extension" do |e|
   e.sources *header_dirs,
     :library_paths => *paths,       # Adds to -L
     :libraries => *libs,            # Adds to -l

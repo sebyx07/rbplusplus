@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module RbGCCXML
   class Class < Node
-
     def initialize(*args)
       super
 
@@ -29,7 +30,7 @@ module RbGCCXML
     #   math_class.includes node.namespaces("Math").classes("Degree")
     #
     def includes(val)
-      if (val.is_a?(RbGCCXML::Struct) || val.is_a?(RbGCCXML::Class))
+      if val.is_a?(RbGCCXML::Struct) || val.is_a?(RbGCCXML::Class)
         @included_classes << val
       else
         @included_methods << val
@@ -38,12 +39,12 @@ module RbGCCXML
     end
 
     alias_method :node_classes, :classes
-    def classes(*args) #:nodoc:
+    def classes(*args) # :nodoc:
       find_with(node_classes(*args), @included_classes)
     end
 
     alias_method :node_methods, :methods
-    def methods(*args) #:nodoc:
+    def methods(*args) # :nodoc:
       find_with(node_methods(*args), @included_methods)
     end
 
@@ -58,7 +59,7 @@ module RbGCCXML
       @use_superclass = klass
     end
 
-    def _get_superclass #:nodoc:
+    def _get_superclass # :nodoc:
       @use_superclass
     end
 
@@ -72,7 +73,7 @@ module RbGCCXML
       @use_constructor = node
     end
 
-    def _get_constructor #:nodoc:
+    def _get_constructor # :nodoc:
       @use_constructor
     end
 
@@ -113,18 +114,18 @@ module RbGCCXML
       @wrappings << wrapping
     end
 
-    def _get_custom_declarations #:nodoc:
+    def _get_custom_declarations # :nodoc:
       @declarations
     end
 
-    def _get_custom_wrappings #:nodoc:
+    def _get_custom_wrappings # :nodoc:
       @wrappings
     end
 
     # Does this class have virtual methods (especially pure virtual?)
     # If so, then rb++ will generate a proxy class to handle
     # the message routing as needed.
-    def needs_director? #:nodoc:
+    def needs_director? # :nodoc:
       !!@build_director
     end
 
@@ -137,21 +138,19 @@ module RbGCCXML
 
     # See RbGCCXML::Constructor::implicit_casting
     def implicit_casting(state)
-      self.constructors.each {|c| c.implicit_casting(state) }
+      self.constructors.each { |c| c.implicit_casting(state) }
     end
 
     private
+      # Take the cache key, and the normal results, adds to the results
+      # those that are in the cache and returns them properly.
+      def find_with(results, with = nil)
+        ret = QueryResult.new
+        ret << results if results
+        ret << with if with
+        ret.flatten!
 
-    # Take the cache key, and the normal results, adds to the results
-    # those that are in the cache and returns them properly.
-    def find_with(results, with = nil)
-      ret = QueryResult.new
-      ret << results if results
-      ret << with if with
-      ret.flatten!
-
-      ret.size == 1 ? ret[0] : ret
-    end
+        ret.size == 1 ? ret[0] : ret
+      end
   end
 end
-

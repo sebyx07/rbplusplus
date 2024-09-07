@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 module RbPlusPlus
   module Builders
     module EnumerationHelpers
-
       # Wrap up enumerations for this node.
       # Anonymous enumerations are a special case. C++ doesn't
       # see them as a seperate type and instead are just "scoped" constants,
@@ -11,7 +12,7 @@ module RbPlusPlus
           next if do_not_wrap?(enum)
 
           if enum.anonymous?
-            # So for each value of this enumeration, 
+            # So for each value of this enumeration,
             # expose it as a constant
             enum.values.each do |value|
               add_child ConstNode.new(value, self)
@@ -19,10 +20,8 @@ module RbPlusPlus
           else
             add_child EnumerationNode.new(enum, self)
           end
-
         end
       end
-
     end
   end
 end

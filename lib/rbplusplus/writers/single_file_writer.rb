@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 module RbPlusPlus
   module Writers
     # Writer that takes a builder and writes out the code in
     # one single file
     class SingleFileWriter < Base
-
       def initialize(builder, working_dir)
         super
 
@@ -22,45 +23,41 @@ module RbPlusPlus
         filename = builder.name
         cpp_file = File.join(working_dir, "#{filename}.rb.cpp")
 
-        File.open(cpp_file, "w+") do |cpp|
-
+        File.open(cpp_file, 'w+') do |cpp|
           cpp.puts @includes.flatten.compact.uniq.sort.reverse.join("\n")
           cpp.puts @global_hpp.flatten.compact.join("\n")
           cpp.puts @declarations.flatten.compact.join("\n")
           cpp.puts @global_cpp.flatten.compact.join("\n")
 
           cpp.puts @registrations.flatten.compact.join("\n\t")
-          cpp.puts "} RUBY_CATCH"
-          cpp.puts "}"
-
+          cpp.puts '} RUBY_CATCH'
+          cpp.puts '}'
         end
       end
 
       protected
+        # What we do here is to go through the builder heirarchy
+        # and push all the code from children up to the parent,
+        # ending up with all the code in the top-level builder
+        def process_code(builder)
+          builder.write
 
-      # What we do here is to go through the builder heirarchy
-      # and push all the code from children up to the parent,
-      # ending up with all the code in the top-level builder
-      def process_code(builder)
-        builder.write
+          @includes << builder.includes
+          @declarations << builder.declarations
+          @registrations << builder.registrations
 
-        @includes << builder.includes
-        @declarations << builder.declarations
-        @registrations << builder.registrations
+          # Process the globals
+          builder.global_nodes.each do |g|
+            g.write
+            @includes << g.includes
+            @global_hpp << g.declarations
+            @global_cpp << g.registrations
+          end
 
-        # Process the globals
-        builder.global_nodes.each do |g|
-          g.write
-          @includes << g.includes
-          @global_hpp << g.declarations
-          @global_cpp << g.registrations
+          builder.nodes.each do |b|
+            process_code(b)
+          end
         end
-
-        builder.nodes.each do |b|
-          process_code(b)
-        end
-      end
-
     end
   end
 end

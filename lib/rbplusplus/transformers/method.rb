@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module RbGCCXML
   class Method < Function
-
     # Specifies a default return value for the
     # virtual method wrapper that rb++ will build
     # for this method.
@@ -26,4 +27,3 @@ module RbGCCXML
     end
   end
 end
-

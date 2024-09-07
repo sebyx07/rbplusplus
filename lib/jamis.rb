@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 module RDoc
-module Page
+  module Page
+    FONTS = '"Bitstream Vera Sans", Verdana, Arial, Helvetica, sans-serif'
 
-FONTS = "\"Bitstream Vera Sans\", Verdana, Arial, Helvetica, sans-serif"
-
-STYLE = <<CSS
+    STYLE = <<CSS
 a {
   color: #00F;
   text-decoration: none;
@@ -182,19 +183,19 @@ h3, h4, h5, h6 {
 
 CSS
 
-XHTML_PREAMBLE = %{<?xml version="1.0" encoding="%charset%"?>
-<!DOCTYPE html 
+    XHTML_PREAMBLE = %{<?xml version="1.0" encoding="%charset%"?>
+<!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 }
 
-XHTML_FRAMESET_PREAMBLE = %{
+    XHTML_FRAMESET_PREAMBLE = %{
 <!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">    
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
 }
 
-HEADER = XHTML_PREAMBLE + <<ENDHEADER
+    HEADER = XHTML_PREAMBLE + <<ENDHEADER
 <html>
   <head>
     <title>%title%</title>
@@ -245,7 +246,7 @@ HEADER = XHTML_PREAMBLE + <<ENDHEADER
   <body>
 ENDHEADER
 
-FILE_PAGE = <<HTML
+    FILE_PAGE = <<HTML
 <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
   <tr><td>
     <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
@@ -271,9 +272,9 @@ ENDIF:cvsurl
 </table><br />
 HTML
 
-###################################################################
+    ###################################################################
 
-CLASS_PAGE = <<HTML
+    CLASS_PAGE = <<HTML
 <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
   <td class="file-title"><span class="file-title-prefix">%classmod%</span><br />%full_name%</td>
   <td align="right">
@@ -309,9 +310,9 @@ ENDIF:parent
       </table>
 HTML
 
-###################################################################
+    ###################################################################
 
-METHOD_LIST = <<HTML
+    METHOD_LIST = <<HTML
   <div id="content">
 IF:diagram
   <table cellpadding='0' cellspacing='0' border='0' width="100%"><tr><td align="center">
@@ -459,12 +460,12 @@ END:sections
 </div>
 HTML
 
-FOOTER = <<ENDFOOTER
+    FOOTER = <<ENDFOOTER
   </body>
 </html>
 ENDFOOTER
 
-BODY = HEADER + <<ENDBODY
+    BODY = HEADER + <<ENDBODY
   !INCLUDE! <!-- banner header -->
 
   <div id="bodyContent">
@@ -474,9 +475,9 @@ BODY = HEADER + <<ENDBODY
   #{FOOTER}
 ENDBODY
 
-########################## Source code ##########################
+    ########################## Source code ##########################
 
-SRC_PAGE = XHTML_PREAMBLE + <<HTML
+    SRC_PAGE = XHTML_PREAMBLE + <<HTML
 <html>
 <head><title>%title%</title>
 <meta http-equiv="Content-Type" content="text/html; charset=%charset%" />
@@ -502,13 +503,13 @@ SRC_PAGE = XHTML_PREAMBLE + <<HTML
 </html>
 HTML
 
-########################## Index ################################
+    ########################## Index ################################
 
-FR_INDEX_BODY = <<HTML
+    FR_INDEX_BODY = <<HTML
 !INCLUDE!
 HTML
 
-FILE_INDEX = XHTML_PREAMBLE + <<HTML
+    FILE_INDEX = XHTML_PREAMBLE + <<HTML
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=%charset%" />
@@ -517,7 +518,7 @@ FILE_INDEX = XHTML_PREAMBLE + <<HTML
 <!--
   body {
     background-color: #EEE;
-    font-family: #{FONTS}; 
+    font-family: #{FONTS};#{' '}
     color: #000;
     margin: 0px;
   }
@@ -556,10 +557,10 @@ END:entries
 </body></html>
 HTML
 
-CLASS_INDEX = FILE_INDEX
-METHOD_INDEX = FILE_INDEX
+    CLASS_INDEX = FILE_INDEX
+    METHOD_INDEX = FILE_INDEX
 
-INDEX = XHTML_FRAMESET_PREAMBLE + <<HTML
+    INDEX = XHTML_FRAMESET_PREAMBLE + <<HTML
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>%title%</title>
@@ -583,7 +584,5 @@ INDEX = XHTML_FRAMESET_PREAMBLE + <<HTML
 
 </html>
 HTML
-
+  end
 end
-end
-

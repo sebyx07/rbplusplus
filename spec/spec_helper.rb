@@ -1,11 +1,10 @@
-$:.unshift File.expand_path(File.dirname(__FILE__) + "/../lib")
-$:.unshift File.expand_path(File.dirname(__FILE__) + "/generated")
+# frozen_string_literal: true
 
-require 'rubygems'
-require 'rspec'
+$:.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
+$:.unshift File.expand_path(File.dirname(__FILE__) + '/generated')
+
+require 'pry'
 require 'rbplusplus'
-
-include RbPlusPlus
 
 module FileDirectoryHelpers
   def full_dir(path)
@@ -39,4 +38,6 @@ RSpec.configure do |config|
   config.before(:all) do
     test_setup
   end
+
+  config.order = 'random'
 end

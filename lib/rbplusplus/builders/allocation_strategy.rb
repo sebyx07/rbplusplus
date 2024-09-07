@@ -1,10 +1,10 @@
+# frozen_string_literal: true
+
 module RbPlusPlus
   module Builders
-
     # Handles code generation for telling Rice how to allocate / deallocate
     # classes. See ClassNode#check_allocation_strategies.
     class AllocationStrategyNode < Base
-
       def initialize(parent, code, has_public_constructor, has_public_destructor)
         super(code, parent)
         @public_constructor = has_public_constructor
@@ -20,7 +20,7 @@ module RbPlusPlus
       end
 
       def write
-        includes << "#include <rice/Data_Object.hpp>"
+        includes << '#include <rice/Data_Object.hpp>'
 
         node_name = self.code.qualified_name
         code = <<-END
@@ -37,14 +37,11 @@ namespace Rice {
         pre = "Rice::Default_Free_Function< #{node_name} >::"
 
         tmp = "void #{pre}free(#{node_name} * obj) { "
-        tmp += @public_destructor ? "delete obj;" : ""
-        tmp += " }"
+        tmp += @public_destructor ? 'delete obj;' : ''
+        tmp += ' }'
 
         registrations << tmp
       end
-
     end
-
   end
 end
-

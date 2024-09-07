@@ -1,13 +1,13 @@
+# frozen_string_literal: true
+
 module RbPlusPlus
   module Builders
-
     # Node for an #include line.
     # Can be a :local (default) or :system
     # include declaration.
     #
     # Includes have no children
     class IncludeNode < Base
-
       def initialize(parent, path, type = :local)
         super(nil, parent)
 
@@ -16,7 +16,7 @@ module RbPlusPlus
       end
 
       def build
-        #nop
+        # nop
       end
 
       def write
@@ -24,9 +24,6 @@ module RbPlusPlus
           includes << (@type == :local ? "#include \"#{@path}\"" : "#include <#{@path}>")
         end
       end
-
     end
-
   end
 end
-

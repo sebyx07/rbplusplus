@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './generated/my_math'
 
 m = MyMath.new

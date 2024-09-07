@@ -1,8 +1,8 @@
+# frozen_string_literal: true
+
 module RbPlusPlus
   module Builders
-
     class ImplicitCasterNode < Base
-
       def initialize(constructor, parent)
         super(constructor, parent)
 
@@ -19,6 +19,5 @@ module RbPlusPlus
         end
       end
     end
-
   end
 end

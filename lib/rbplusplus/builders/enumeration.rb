@@ -1,11 +1,11 @@
+# frozen_string_literal: true
+
 module RbPlusPlus
   module Builders
-
     # Expose an enumeration.
     class EnumerationNode < Base
-
       def build
-        add_child IncludeNode.new(self, "rice/Enum.hpp", :system)
+        add_child IncludeNode.new(self, 'rice/Enum.hpp', :system)
         add_child IncludeNode.new(self, code.file)
 
         # See ClassNode
@@ -18,7 +18,7 @@ module RbPlusPlus
       end
 
       def write
-        second = parent.rice_variable ? ", #{parent.rice_variable}" : ""
+        second = parent.rice_variable ? ", #{parent.rice_variable}" : ''
 
         registrations << "\t#{rice_variable_type} #{rice_variable} = " \
           "Rice::define_enum< #{code.qualified_name} >(\"#{code.name}\"#{second});"
@@ -27,7 +27,6 @@ module RbPlusPlus
           registrations << "\t#{rice_variable}.define_value(\"#{v.name}\", #{v.qualified_name});"
         end
       end
-
     end
   end
 end

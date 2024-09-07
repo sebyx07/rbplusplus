@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 module RbPlusPlus
   # Class representation of a ruby Module to be exposed in the extension.
   # A Module acts much in the same way as Extension in that it can contain
-  # classes, functions, enumerations, etc. 
+  # classes, functions, enumerations, etc.
   class RbModule
-
     # Modules can be nested
     attr_accessor :modules
 
@@ -20,14 +21,14 @@ module RbPlusPlus
     # Use Extension#module or RbModule#module instead
     # of creating an instance of this class directly
     #
-    # The block parameter is optional, you can also 
+    # The block parameter is optional, you can also
     # grab the reference of the Module and work with
     # it as you want:
     #
     #   module "Name" do |m|
     #     ...
     #   end
-    #   
+    #
     # or
     #
     #   m = module "Name"
@@ -51,7 +52,7 @@ module RbPlusPlus
     #
     # Also see Extension#namespace
     def namespace(name)
-      @node = @parser.namespaces.find(:all, :name => name)
+      @node = @parser.namespaces.find(:all, name: name)
     end
 
     # Register another module to be defined inside of
@@ -107,6 +108,5 @@ module RbPlusPlus
         self.name
       end
     end
-
   end
 end

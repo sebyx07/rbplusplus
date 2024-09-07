@@ -1,18 +1,16 @@
-require 'test_helper'
-
-describe "Extension with wrapped classes" do
-
+# frozen_string_literal: true
+describe 'Extension with wrapped classes' do
   before(:all) do
-    Extension.new "adder" do |e|
-      e.sources full_dir("headers/Adder.h"),
-        :include_source_files => [
-          full_dir("headers/Adder.h"),
-          full_dir("headers/Adder.cpp")
+    RbPlusPlus::Extension.new 'adder' do |e|
+      e.sources full_dir('headers/Adder.h'),
+        include_source_files: [
+          full_dir('headers/Adder.h'),
+          full_dir('headers/Adder.cpp')
         ]
-      node = e.namespace "classes"
-      adder = node.classes("Adder")
+      node = e.namespace 'classes'
+      adder = node.classes('Adder')
 
-      adder.use_constructor( adder.constructors.find(:arguments => []))
+      adder.use_constructor(adder.constructors.find(arguments: []))
       adder.disable_typedef_lookup
 
       decl = <<-END
@@ -28,19 +26,17 @@ return a * b;
       wrapping = <<-END
 <class>.define_method(\"sub_ints\", &subtractIntegers);
 <class>.define_method(\"mult_ints\", &multiplyIntegers);
-END
+      END
 
-      adder.add_custom_code( decl, wrapping )
+      adder.add_custom_code(decl, wrapping)
     end
 
     require 'adder'
   end
 
-  specify "Adder has new custom methods" do
+  specify 'Adder has new custom methods' do
     a = Adder.new
     a.sub_ints(5, 4).should == 1
     a.mult_ints(5, 4).should == 20
   end
-
 end
-

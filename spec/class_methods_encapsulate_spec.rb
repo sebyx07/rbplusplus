@@ -1,16 +1,15 @@
-require 'test_helper'
-
-describe "Correct handling of encapsulated methods" do
+# frozen_string_literal: true
+describe 'Correct handling of encapsulated methods' do
   before(:all) do
-    Extension.new "encapsulation" do |e|
-      e.sources full_dir("headers/class_methods.h")
-      node = e.namespace "encapsulation"
+    RbPlusPlus::Extension.new 'encapsulation' do |e|
+      e.sources full_dir('headers/class_methods.h')
+      e.namespace 'encapsulation'
     end
 
     require 'encapsulation'
   end
 
-  specify "should handle private/protected/public" do
+  specify 'should handle private/protected/public' do
     ext = Extended.new
     ext.public_method.should == 1
 
@@ -23,7 +22,7 @@ describe "Correct handling of encapsulated methods" do
     end.should raise_error(NoMethodError)
   end
 
-  specify "should handle virtual methods" do
+  specify 'should handle virtual methods' do
     ext_factory = ExtendedFactory.new
     ext = ext_factory.new_instance
     ext.fundamental_type_virtual_method.should == 1
@@ -52,4 +51,3 @@ describe "Correct handling of encapsulated methods" do
     arg.wrap_me_many_yes(1, 2.0, ArgumentAccess::PublicStruct.new)
   end
 end
-

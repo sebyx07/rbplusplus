@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module RbGCCXML
   class Node
-
     # Specify to Rb++ that this node is not to be wrapped
     def ignore
       @ignored = true
@@ -18,9 +19,7 @@ module RbGCCXML
     end
 
     # Specifies that this node has been included somewhere else
-    def moved_to=(val)
-      @moved_to = val
-    end
+    attr_writer :moved_to
 
     # Change what the name of this node will be when wrapped into Ruby
     def wrap_as(name)
@@ -29,9 +28,7 @@ module RbGCCXML
     end
 
     # Where has this node moved to?
-    def moved_to
-      @moved_to
-    end
+    attr_reader :moved_to
 
     # Has this node been renamed
     def renamed?
@@ -39,7 +36,7 @@ module RbGCCXML
     end
 
     alias_method :rbgccxml_name, :name
-    def name #:nodoc:
+    def name # :nodoc:
       @wrap_as || rbgccxml_name
     end
 
@@ -56,14 +53,14 @@ module RbGCCXML
       @disable_typedef_lookup = true
     end
 
-    def _disable_typedef_lookup? #:nodoc:
+    def _disable_typedef_lookup? # :nodoc:
       !!@disable_typedef_lookup
     end
 
     # Is this node an incomplete node?
     # TODO Move to rbgccxml
     def incomplete?
-      self["incomplete"] ? self["incomplete"] == "1" : false
+      self['incomplete'] ? self['incomplete'] == '1' : false
     end
   end
 end
