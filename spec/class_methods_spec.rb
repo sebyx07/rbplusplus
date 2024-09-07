@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Correct handling of static methods' do
   specify 'should handle complex static methods' do
     RbPlusPlus::Extension.new 'complex_test' do |e|

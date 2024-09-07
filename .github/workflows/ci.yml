@@ -19,8 +19,11 @@ jobs:
           ruby-version: 3.3.4
           bundler-cache: true
 
-      - name: Install system dependencies
-        run: sudo apt-get install -y cmake
+      - name: Cache APT packages
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: cmake llvm-15 llvm-15-dev libclang-15-dev
+          version: 1.0
 
       - name: Install Ruby dependencies
         run: bundle install
@@ -28,22 +31,29 @@ jobs:
       - name: Build and install CastXML
         run: |
           git clone https://github.com/CastXML/CastXML.git
-          mkdir CastXMLBuild
-          cd CastXMLBuild
-          cmake ../CastXML
-          make
-          echo "$PWD/bin" >> $GITHUB_PATH
+          mkdir -p ${{ github.workspace }}/CastXMLBuild
+          mkdir -p ${{ github.workspace }}/CastXMLInstall
+          cd ${{ github.workspace }}/CastXMLBuild
+          cmake ../CastXML -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/CastXMLInstall -DLLVM_DIR=/usr/lib/llvm-15/cmake -DClang_DIR=/usr/lib/cmake/clang-15
+          make -j$(nproc)
+          make install
+
+      - name: Add CastXML to PATH and verify installation
+        run: |
+          echo "${{ github.workspace }}/CastXMLInstall/bin" >> $GITHUB_PATH
+          echo "Current PATH: $PATH"
+          which castxml || echo "castxml not found in PATH"
+          ls -l ${{ github.workspace }}/CastXMLInstall/bin || echo "CastXMLInstall/bin directory not found"
+          if [ -f "${{ github.workspace }}/CastXMLInstall/bin/castxml" ]; then
+            echo "CastXML executable exists"
+            file ${{ github.workspace }}/CastXMLInstall/bin/castxml
+            ${{ github.workspace }}/CastXMLInstall/bin/castxml --version
+          else
+            echo "CastXML executable not found"
+          fi
 
       - name: Run tests
         run: bundle exec rspec
 
       - name: Lint code for consistent style
         run: bundle exec rubocop --parallel
-
-      - name: Cache CastXML build
-        uses: actions/cache@v3
-        with:
-          path: CastXMLBuild
-          key: ${{ runner.os }}-castxml-${{ hashFiles('**/CastXML/**') }}
-          restore-keys: |
-            ${{ runner.os }}-castxml-

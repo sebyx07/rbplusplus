@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Extension with overloaded methods' do
   specify 'should have all functions available' do
     RbPlusPlus::Extension.new 'overload' do |e|

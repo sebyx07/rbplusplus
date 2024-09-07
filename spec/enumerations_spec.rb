@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Wrapping enumerations' do
   before(:all) do
     RbPlusPlus::Extension.new 'enums' do |e|

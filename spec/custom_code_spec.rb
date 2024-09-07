@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Extension with wrapped classes' do
   before(:all) do
     RbPlusPlus::Extension.new 'adder' do |e|

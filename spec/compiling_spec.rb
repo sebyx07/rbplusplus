@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Compiler settings' do
   before(:each) do
     test_setup
@@ -29,7 +30,7 @@ describe 'Compiler settings' do
 
     contents = File.read(ext_file)
 
-    contents.should =~ %r(-L/usr/lib/testing/123)
+    contents.should.include?('-L/usr/lib/testing/123')
 
     # Clean up
     `rm -rf #{full_dir('generated')}/*`
@@ -46,8 +47,8 @@ describe 'Compiler settings' do
 
     contents = File.read(ext_file)
 
-    contents.should =~ %r(-L/usr/lib/testing/456)
-    contents.should =~ %r(-L/var/lib/stuff)
+    contents.should.include?('-L/usr/lib/testing/456')
+    contents.should.include?('-L/var/lib/stuff')
   end
 
   specify 'should be able to link to external libraries' do
@@ -63,7 +64,7 @@ describe 'Compiler settings' do
 
     contents = File.read(ext_file)
 
-    contents.should =~ %r(-llib123)
+    contents.should.include?('-llib123')
 
     # Clean up
     `rm -rf #{full_dir('generated')}/*`
@@ -80,9 +81,9 @@ describe 'Compiler settings' do
 
     contents = File.read(ext_file)
 
-    contents.should =~ %r(-lponzor)
-    contents.should =~ %r(-lwonko)
-    contents.should =~ %r(-lprankit)
+    contents.should.include?('-lponzor')
+    contents.should.include?('-lwonko')
+    contents.should.include?('-lprankit')
   end
 
   specify 'can add extra cxxflags for gccxml and compiling' do
@@ -97,8 +98,8 @@ describe 'Compiler settings' do
 
     contents = File.read(ext_file)
 
-    contents.should =~ %r(-I/i/love/scotch)
-    contents.should =~ %r(-D__AND_DEFINE_THAT)
+    contents.should.include?('-I/i/love/scotch')
+    contents.should.include?('-D__AND_DEFINE_THAT')
   end
 
   specify 'can add extra ldflags for gccxml and compiling' do
@@ -113,9 +114,9 @@ describe 'Compiler settings' do
 
     contents = File.read(ext_file)
 
-    contents.should =~ %r(-R/wootage/to/you)
-    contents.should =~ %r(-lthisandthat)
-    contents.should =~ %r(-nothing_here)
+    contents.should.include?('-R/wootage/to/you')
+    contents.should.include?('-lthisandthat')
+    contents.should.include?('-nothing_here')
   end
 
   specify 'should pass cxxflags to rbgccxml' do

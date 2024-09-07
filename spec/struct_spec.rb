@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Nested Struct' do
   specify 'should be accessible' do
     RbPlusPlus::Extension.new 'nested' do |e|

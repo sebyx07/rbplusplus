@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Wrapping Classes within classes' do
   before(:all) do
     RbPlusPlus::Extension.new 'nested' do |e|

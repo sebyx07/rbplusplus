@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Extension with modules' do
   before(:all) do
     RbPlusPlus::Extension.new 'modules' do |e|

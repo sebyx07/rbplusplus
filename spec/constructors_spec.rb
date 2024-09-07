@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Extension with constructors out the whazoo' do
   specify 'should make constructors available' do
     RbPlusPlus::Extension.new 'constructors' do |e|

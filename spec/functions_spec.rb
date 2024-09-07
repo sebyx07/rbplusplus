@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Extension with globally available functions' do
   specify 'should make functions available' do
     RbPlusPlus::Extension.new 'functions' do |e|

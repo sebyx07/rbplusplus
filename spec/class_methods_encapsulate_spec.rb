@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Correct handling of encapsulated methods' do
   before(:all) do
     RbPlusPlus::Extension.new 'encapsulation' do |e|

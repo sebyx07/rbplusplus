@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Properly build known required to_ruby and from_ruby methods' do
   specify 'should build for const & types as needed' do
     RbPlusPlus::Extension.new 'to_from_ruby' do |e|

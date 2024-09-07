@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Director proxy generation' do
   before(:all) do
     RbPlusPlus::Extension.new 'director' do |e|

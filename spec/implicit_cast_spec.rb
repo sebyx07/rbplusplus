@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Specify types to allow implicit casting' do
   before(:all) do
     RbPlusPlus::Extension.new 'implicit_cast' do |e|

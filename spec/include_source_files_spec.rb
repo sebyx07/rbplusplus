@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Using multiple include source files' do
   before(:each) do
     test_setup

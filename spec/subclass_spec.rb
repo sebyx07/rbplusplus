@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Extension with class hierachies' do
   specify 'should make super classes methods available' do
     RbPlusPlus::Extension.new 'subclass' do |e|

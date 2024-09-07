@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class GCCXML
   def parse(header_file, to_file)
-    includes = @includes.flatten.uniq.map {|i| "-I#{i.chomp}"}.join(" ").chomp
-    flags = @flags.flatten.join(" ").chomp
+    includes = @includes.flatten.uniq.map { |i| "-I#{i.chomp}" }.join(' ').chomp
+    flags = @flags.flatten.join(' ').chomp
     flags += " -Wno-unused-command-line-argument --castxml-cc-gnu gcc #{find_clang} --castxml-gccxml"
 
     exe = find_exe.strip.chomp
@@ -14,8 +16,8 @@ module RbGCCXML
   class Type
     def check_sub_type_without(val, delim)
       if val.is_a?(String)
-        return false unless val =~ delim
-        new_val = val.gsub(delim, "").strip
+        return false unless val&.match?(delim)
+        new_val = val.gsub(delim, '').strip
       elsif val.is_a?(RbGCCXML::PointerType)
         # Handle PointerType objects
         new_val = val.base_type
@@ -23,7 +25,7 @@ module RbGCCXML
         return false
       end
 
-      base_type = NodeCache.find(attributes["type"])
+      base_type = NodeCache.find(attributes['type'])
       base_type == new_val
     end
   end

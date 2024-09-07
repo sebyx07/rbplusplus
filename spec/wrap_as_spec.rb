@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Ugly interfaces cleaner' do
   specify 'should map functions detailed' do
     node = nil

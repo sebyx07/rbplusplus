@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'properly handles and wraps function pointer arguments' do
   before(:all) do
     RbPlusPlus::Extension.new 'function_pointers' do |e|

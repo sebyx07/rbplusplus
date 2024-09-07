@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Default arguments properly exposed' do
   before(:all) do
     RbPlusPlus::Extension.new 'defargs' do |e|

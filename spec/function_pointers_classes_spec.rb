@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Function pointers into class methods' do
   before(:all) do
     RbPlusPlus::Extension.new 'function_pointers_class' do |e|

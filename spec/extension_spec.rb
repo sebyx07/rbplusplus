@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Ruby Extension creation' do
   specify 'should create a valid Ruby extension' do
     RbPlusPlus::Extension.new 'ext_test' do |e|

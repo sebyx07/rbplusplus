@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Multiple file writer (default)' do
   before(:each) do
     @working_dir = File.expand_path(File.dirname(__FILE__) + '/generated')

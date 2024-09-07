@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe 'Using include_source_dir' do
   specify 'can specify a directory containing code to be included into compilation process' do
     RbPlusPlus::Extension.new 'code_dir' do |e|
