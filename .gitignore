@@ -8,3 +8,4 @@ publish
 Gemfile.lock
 .idea/
 tmp/
+*.gem
