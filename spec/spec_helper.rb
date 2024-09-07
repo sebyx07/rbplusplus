@@ -39,5 +39,6 @@ RSpec.configure do |config|
 
   config.before do
     FileUtils.rm_rf('spec/generated')
+    FileUtils.mkdir_p('spec/generated')
   end
 end
